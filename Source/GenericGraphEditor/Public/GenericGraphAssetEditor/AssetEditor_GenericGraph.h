@@ -116,9 +116,9 @@ protected:
 #endif // #else // #if ENGINE_MAJOR_VERSION < 5
 
 protected:
-	UGenericGraphEditorSettings* GenricGraphEditorSettings;
 
-	UGenericGraph* EditingGraph;
+	TObjectPtr<UGenericGraphEditorSettings> GenericGraphEditorSettings = nullptr;
+	TObjectPtr<UGenericGraph> EditingGraph = nullptr;
 
 	//Toolbar
 	TSharedPtr<class FAssetEditorToolbar_GenericGraph> ToolbarBuilder;
