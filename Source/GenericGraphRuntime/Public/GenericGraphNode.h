@@ -51,6 +51,7 @@ public:
 
 	//////////////////////////////////////////////////////////////////////////
 #if WITH_EDITORONLY_DATA
+
 	UPROPERTY(EditDefaultsOnly, Category = "GenericGraphNode_Editor")
 	FText NodeTitle;
 
@@ -83,6 +84,8 @@ public:
 	virtual FLinearColor GetBackgroundColor() const;
 
 	virtual FText GetNodeTitle() const;
+
+	virtual FText GetContextMenuName() const;
 
 	virtual void SetNodeTitle(const FText& NewTitle);
 

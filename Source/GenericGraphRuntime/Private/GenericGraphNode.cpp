@@ -42,6 +42,11 @@ FText UGenericGraphNode::GetNodeTitle() const
 	return NodeTitle.IsEmpty() ? GetDescription() : NodeTitle;
 }
 
+FText UGenericGraphNode::GetContextMenuName() const
+{
+	return ContextMenuName;
+}
+
 void UGenericGraphNode::SetNodeTitle(const FText& NewTitle)
 {
 	NodeTitle = NewTitle;

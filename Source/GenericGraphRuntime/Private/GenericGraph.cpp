@@ -133,4 +133,9 @@ void UGenericGraph::ClearGraph()
 	RootNodes.Empty();
 }
 
+bool UGenericGraph::CanCreateNodeOfType(TSubclassOf<UGenericGraphNode> NoceClass) const
+{
+	return true;
+}
+
 #undef LOCTEXT_NAMESPACE

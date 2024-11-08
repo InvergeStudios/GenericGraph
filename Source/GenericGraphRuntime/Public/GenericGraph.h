@@ -47,6 +47,8 @@ public:
 
 	void ClearGraph();
 
+	virtual bool CanCreateNodeOfType(TSubclassOf<UGenericGraphNode> NoceClass) const;
+
 #if WITH_EDITORONLY_DATA
 	UPROPERTY()
 	TObjectPtr<class UEdGraph> EdGraph = nullptr;
