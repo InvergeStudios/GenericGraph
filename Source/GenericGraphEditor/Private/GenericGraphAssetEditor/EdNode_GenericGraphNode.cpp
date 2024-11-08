@@ -1,5 +1,8 @@
 #include "GenericGraphAssetEditor/EdNode_GenericGraphNode.h"
 #include "GenericGraphAssetEditor/EdGraph_GenericGraph.h"
+
+#include "GenericGraphAssetEditor/SEdNode_GenericGraphNode.h"
+
 #include "Kismet2/Kismet2NameValidators.h"
 #include "Kismet2/BlueprintEditorUtils.h"
 
@@ -74,6 +77,16 @@ UEdGraphPin* UEdNode_GenericGraphNode::GetInputPin() const
 UEdGraphPin* UEdNode_GenericGraphNode::GetOutputPin() const
 {
 	return Pins[1];
+}
+
+TSharedPtr<class SGraphNode> UEdNode_GenericGraphNode::CreateNodeWidget()
+{
+	return SNew(SEdNode_GenericGraphNode, this);
+}
+
+TSubclassOf<UGenericGraphNode> UEdNode_GenericGraphNode::GetNodeClass()
+{
+	return UGenericGraphNode::StaticClass();
 }
 
 void UEdNode_GenericGraphNode::PostEditUndo()
