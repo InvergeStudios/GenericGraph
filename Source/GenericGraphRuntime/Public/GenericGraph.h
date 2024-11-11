@@ -50,6 +50,8 @@ public:
 	virtual bool CanCreateNodeOfType(TSubclassOf<UGenericGraphNode> NoceClass) const;
 
 #if WITH_EDITORONLY_DATA
+	virtual FText GetCornerText() const;
+
 	UPROPERTY()
 	TObjectPtr<class UEdGraph> EdGraph = nullptr;
 

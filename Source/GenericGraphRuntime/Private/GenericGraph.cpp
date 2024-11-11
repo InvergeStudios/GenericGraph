@@ -138,4 +138,9 @@ bool UGenericGraph::CanCreateNodeOfType(TSubclassOf<UGenericGraphNode> NoceClass
 	return true;
 }
 
+FText UGenericGraph::GetCornerText() const
+{
+	return FText::FromString("Generic Graph");
+}
+
 #undef LOCTEXT_NAMESPACE
