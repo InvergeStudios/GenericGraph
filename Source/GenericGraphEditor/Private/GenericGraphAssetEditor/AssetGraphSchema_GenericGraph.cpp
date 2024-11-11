@@ -212,10 +212,32 @@ void UAssetGraphSchema_GenericGraph::GetGraphContextActions(FGraphContextMenuBui
 		Desc = FText::FromString(Title);
 	}
 
+	const UClass* BaseClass = UEdNode_GenericGraphNode::StaticClass();
+	TSet<TSubclassOf<UEdNode_GenericGraphNode>> EdNodesVisited;
+	for (TObjectIterator<UClass> It; It; ++It)
+	{
+		if (It->IsChildOf(BaseClass) && !It->HasAnyClassFlags(CLASS_Abstract) && !EdNodesVisited.Contains(*It))
+		{
+			TSubclassOf<UEdNode_GenericGraphNode> EdNodeType = *It;
+			EdNodesVisited.Add(EdNodeType);
+		}
+	}
+
 	if (!Graph->NodeType->HasAnyClassFlags(CLASS_Abstract))
 	{
 		TSharedPtr<FAssetSchemaAction_GenericGraph_NewNode> NewNodeAction(new FAssetSchemaAction_GenericGraph_NewNode(LOCTEXT("GenericGraphNodeAction", "Generic Graph Node"), Desc, AddToolTip, 0));
-		NewNodeAction->NodeTemplate = NewObject<UEdNode_GenericGraphNode>(ContextMenuBuilder.OwnerOfTemporaries);
+
+		TSubclassOf<UEdNode_GenericGraphNode> EdNodeClassToUse = UEdNode_GenericGraphNode::StaticClass();
+		for (TSubclassOf<UEdNode_GenericGraphNode> EdNodeClass : EdNodesVisited)
+		{
+			UEdNode_GenericGraphNode* DefaultEdNodeObject = Cast<UEdNode_GenericGraphNode>(EdNodeClass->GetDefaultObject());
+			if (Graph->NodeType->IsChildOf(DefaultEdNodeObject->GetNodeClass()) && !EdNodeClassToUse->IsChildOf(EdNodeClass))
+			{
+				EdNodeClassToUse = EdNodeClass;
+			}
+		}
+
+		NewNodeAction->NodeTemplate = NewObject<UEdNode_GenericGraphNode>(ContextMenuBuilder.OwnerOfTemporaries, EdNodeClassToUse);
 		NewNodeAction->NodeTemplate->GenericGraphNode = NewObject<UGenericGraphNode>(NewNodeAction->NodeTemplate, Graph->NodeType);
 		NewNodeAction->NodeTemplate->GenericGraphNode->Graph = Graph;
 		ContextMenuBuilder.AddAction(NewNodeAction);
@@ -248,7 +270,18 @@ void UAssetGraphSchema_GenericGraph::GetGraphContextActions(FGraphContextMenuBui
 			}
 
 			TSharedPtr<FAssetSchemaAction_GenericGraph_NewNode> Action(new FAssetSchemaAction_GenericGraph_NewNode(LOCTEXT("GenericGraphNodeAction", "Generic Graph Node"), Desc, AddToolTip, 0));
-			Action->NodeTemplate = NewObject<UEdNode_GenericGraphNode>(ContextMenuBuilder.OwnerOfTemporaries);
+
+			TSubclassOf<UEdNode_GenericGraphNode> EdNodeClassToUse = UEdNode_GenericGraphNode::StaticClass();
+			for (TSubclassOf<UEdNode_GenericGraphNode> EdNodeClass : EdNodesVisited)
+			{
+				UEdNode_GenericGraphNode* DefaultEdNodeObject = Cast<UEdNode_GenericGraphNode>(EdNodeClass->GetDefaultObject());
+				if (NodeType->IsChildOf(DefaultEdNodeObject->GetNodeClass()) && !EdNodeClassToUse->IsChildOf(EdNodeClass))
+				{
+					EdNodeClassToUse = EdNodeClass;
+				}
+			}
+
+			Action->NodeTemplate = NewObject<UEdNode_GenericGraphNode>(ContextMenuBuilder.OwnerOfTemporaries, EdNodeClassToUse);
 			Action->NodeTemplate->GenericGraphNode = NewObject<UGenericGraphNode>(Action->NodeTemplate, NodeType);
 			Action->NodeTemplate->GenericGraphNode->Graph = Graph;
 			ContextMenuBuilder.AddAction(Action);

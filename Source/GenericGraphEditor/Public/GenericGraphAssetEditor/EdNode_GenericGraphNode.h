@@ -9,8 +9,8 @@ class UEdNode_GenericGraphEdge;
 class UEdGraph_GenericGraph;
 class SEdNode_GenericGraphNode;
 
-UCLASS(MinimalAPI)
-class UEdNode_GenericGraphNode : public UEdGraphNode
+UCLASS()
+class GENERICGRAPHEDITOR_API UEdNode_GenericGraphNode : public UEdGraphNode
 {
 	GENERATED_BODY()
 
@@ -34,6 +34,10 @@ public:
 	virtual FLinearColor GetBackgroundColor() const;
 	virtual UEdGraphPin* GetInputPin() const;
 	virtual UEdGraphPin* GetOutputPin() const;
+
+	virtual TSharedPtr<class SGraphNode> CreateNodeWidget();
+
+	virtual TSubclassOf<UGenericGraphNode> GetNodeClass();
 
 #if WITH_EDITOR
 	virtual void PostEditUndo() override;
