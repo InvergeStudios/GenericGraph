@@ -105,6 +105,13 @@ void UEdGraph_GenericGraph::RebuildGenericGraph()
 
 		Node->Graph = Graph;
 		Node->Rename(nullptr, Graph, REN_DontCreateRedirectors | REN_DoNotDirty);
+
+		Node->ChildrenNodes.Sort([&](const UGenericGraphNode& L, const UGenericGraphNode& R)
+			{
+				UEdNode_GenericGraphNode* EdNode_LNode = NodeMap[&L];
+				UEdNode_GenericGraphNode* EdNode_RNode = NodeMap[&R];
+				return EdNode_LNode->NodePosX < EdNode_RNode->NodePosX;
+			});
 	}
 
 	Graph->RootNodes.Sort([&](const UGenericGraphNode& L, const UGenericGraphNode& R)
