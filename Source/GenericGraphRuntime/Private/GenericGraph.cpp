@@ -138,9 +138,11 @@ bool UGenericGraph::CanCreateNodeOfType(TSubclassOf<UGenericGraphNode> NoceClass
 	return true;
 }
 
+#if WITH_EDITORONLY_DATA
 FText UGenericGraph::GetCornerText() const
 {
 	return FText::FromString("Generic Graph");
 }
+#endif
 
 #undef LOCTEXT_NAMESPACE
